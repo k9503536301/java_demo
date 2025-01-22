@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class TransactionService {
-
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
+    private final ObjectMapper objectMapper;
     @PostConstruct
     void init() {
         try {
@@ -38,11 +38,13 @@ public class TransactionService {
     }
 
     public List<Transaction> parseJson() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
         TransactionDto[] transactions;
 
-        try(InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mock_data/transactions.json")){
-            transactions = mapper.readValue(in, TransactionDto[].class);
+        try(InputStream in = Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream("mock_data/transactions.json")
+        ){
+            transactions = objectMapper.readValue(in, TransactionDto[].class);
         } catch(Exception e){
             throw new IOException(e);
         }

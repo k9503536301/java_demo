@@ -1,5 +1,6 @@
 package ru.t1.java.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +27,7 @@ public class TransactionDto implements Serializable {
     @JsonProperty("amount")
     private BigDecimal amount;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("transaction_time")
-    private String transactionTime;
+    private LocalDateTime transactionTime;
 }

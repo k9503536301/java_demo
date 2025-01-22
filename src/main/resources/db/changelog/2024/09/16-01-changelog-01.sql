@@ -25,8 +25,7 @@ CREATE TABLE transactions
     id SERIAL PRIMARY KEY,
     account_id INT NOT NULL,
     amount DECIMAL(15,2) NOT NULL,
---    transaction_time TIMESTAMP NOT NULL DEFAULT NOW(),
-    transaction_time VARCHAR(40),
+    transaction_time TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
 );
 
