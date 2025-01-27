@@ -6,6 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import ru.t1.java.demo.kafka.DataSourceErrorProducer;
 import ru.t1.java.demo.model.DataSourceErrorLog;
 import ru.t1.java.demo.repository.DataSourceErrorLogRepository;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LogDataSourceErrorAspect {
     private final DataSourceErrorLogRepository repository;
+    private final DataSourceErrorProducer producer;
 
     @AfterThrowing(pointcut = "@annotation(ru.t1.java.demo.aop.annotation.LogDataSourceError)", throwing = "e")
     public void logExceptionAnnotation(JoinPoint joinPoint, Throwable e) {
@@ -32,6 +34,12 @@ public class LogDataSourceErrorAspect {
                 .stackTrace(stackTraceMessage)
                 .methodSignature(joinPoint.getSignature().getName())
                 .build();
-        repository.save(sourceLog);
+
+        try {
+            producer.sendErrorLog(sourceLog);
+        } catch (Exception ex) {
+            log.error("Failed to send error log to Kafka: {}", ex.getMessage(), ex);
+            repository.save(sourceLog);
+        }
     }
 }
