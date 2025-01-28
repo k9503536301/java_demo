@@ -36,3 +36,6 @@ t1:
       metrics: t1_demo_metrics
     listener:
       poll-timeout: 1000
+
+track:
+  time-limit-exceed: 1000

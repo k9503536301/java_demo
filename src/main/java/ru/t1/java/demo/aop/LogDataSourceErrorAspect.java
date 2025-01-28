@@ -6,8 +6,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import ru.t1.java.demo.kafka.DataSourceErrorProducer;
+import ru.t1.java.demo.kafka.MetricProducer;
 import ru.t1.java.demo.model.DataSourceErrorLog;
+import ru.t1.java.demo.model.MetricErrorType;
 import ru.t1.java.demo.repository.DataSourceErrorLogRepository;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LogDataSourceErrorAspect {
     private final DataSourceErrorLogRepository repository;
-    private final DataSourceErrorProducer producer;
+    private final MetricProducer producer;
 
     @AfterThrowing(pointcut = "@annotation(ru.t1.java.demo.aop.annotation.LogDataSourceError)", throwing = "e")
     public void logExceptionAnnotation(JoinPoint joinPoint, Throwable e) {
@@ -36,7 +37,7 @@ public class LogDataSourceErrorAspect {
                 .build();
 
         try {
-            producer.sendErrorLog(sourceLog);
+            producer.sendMetricLog(sourceLog, MetricErrorType.DATA_SOURCE);
         } catch (Exception ex) {
             log.error("Failed to send error log to Kafka: {}", ex.getMessage(), ex);
             repository.save(sourceLog);
