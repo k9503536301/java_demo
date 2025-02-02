@@ -55,19 +55,23 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account Client not found"));
 
         return Account.builder()
-                .id(dto.getId())
+                .account_id(dto.getAccountId())
                 .client(client)
                 .accountType(dto.getAccountType())
                 .balance(dto.getBalance())
+                .status(dto.getStatus())
+                .frozenAmount(dto.getFrozenAmount())
                 .build();
     }
 
     public AccountDto toDto(Account entity) {
         return AccountDto.builder()
-                .id(entity.getId())
+                .accountId(entity.getAccount_id())
                 .clientId(entity.getClient().getId())
                 .accountType(entity.getAccountType())
                 .balance(entity.getBalance())
+                .status(entity.getStatus())
+                .frozenAmount(entity.getFrozenAmount())
                 .build();
     }
 

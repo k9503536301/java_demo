@@ -41,7 +41,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Client clientToUpdate = clientService.toEntity(client);
-        clientToUpdate.setId(id);
+        clientToUpdate.setClientId(id);
         Client updatedClient = clientService.updateClient(clientToUpdate);
         return new ResponseEntity<>(clientService.toDto(updatedClient), HttpStatus.OK);
     }

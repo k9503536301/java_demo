@@ -14,8 +14,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class Client extends AbstractPersistable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "client_id", nullable = false)
+    private Long clientId;
 
     @Column(name = "first_name")
     private String firstName;

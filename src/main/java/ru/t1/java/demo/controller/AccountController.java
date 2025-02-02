@@ -44,7 +44,7 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Account accountToUpdate = accountService.toEntity(account);
-        accountToUpdate.setId(id);
+        accountToUpdate.setAccount_id(id);
         Account updatedAccount = accountService.updateAccount(accountToUpdate);
         return new ResponseEntity<>(accountService.toDto(updatedAccount), HttpStatus.OK);
     }

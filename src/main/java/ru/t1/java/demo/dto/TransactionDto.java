@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
+import ru.t1.java.demo.model.enums.AccountStatus;
+import ru.t1.java.demo.model.enums.TransactionStatus;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,7 +21,9 @@ import java.time.LocalDateTime;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TransactionDto implements Serializable {
-    private Long id;
+    @NotNull
+    @JsonProperty("transaction_id")
+    private Long transactionId;
     @NotNull
     @JsonProperty("account_id")
     private Long accountId;
@@ -30,4 +34,11 @@ public class TransactionDto implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("transaction_time")
     private LocalDateTime transactionTime;
+    @NotNull
+    @JsonProperty("status")
+    private TransactionStatus status;
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("timestamp")
+    private LocalDateTime timestamp;
 }

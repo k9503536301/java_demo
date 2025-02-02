@@ -7,7 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
-import ru.t1.java.demo.model.AccountType;
+import ru.t1.java.demo.model.enums.AccountStatus;
+import ru.t1.java.demo.model.enums.AccountType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,7 +19,9 @@ import java.math.BigDecimal;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountDto implements Serializable {
-    private Long id;
+    @NotNull
+    @JsonProperty("account_id")
+    private Long accountId;
     @NotNull
     @JsonProperty("client_id")
     private Long clientId;
@@ -28,4 +31,10 @@ public class AccountDto implements Serializable {
     @NotNull
     @JsonProperty("balance")
     private BigDecimal balance;
+    @NotNull
+    @JsonProperty("status")
+    private AccountStatus status;
+    @NotNull
+    @JsonProperty("frozen_amount")
+    private BigDecimal frozenAmount;
 }

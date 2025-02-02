@@ -44,7 +44,7 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Transaction transactionToUpdate = transactionService.toEntity(transaction);
-        transactionToUpdate.setId(id);
+        transactionToUpdate.setTransactionId(id);
         Transaction updatedTransaction = transactionService.updateTransaction(transactionToUpdate);
         return new ResponseEntity<>(transactionService.toDto(updatedTransaction), HttpStatus.OK);
     }

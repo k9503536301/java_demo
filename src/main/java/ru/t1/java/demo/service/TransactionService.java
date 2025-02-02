@@ -59,19 +59,23 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Transaction Account not found"));
 
         return Transaction.builder()
-                .id(dto.getId())
+                .transactionId(dto.getTransactionId())
                 .account(account)
                 .amount(dto.getAmount())
                 .transactionTime(dto.getTransactionTime())
+                .status(dto.getStatus())
+                .timestamp(dto.getTimestamp())
                 .build();
     }
 
     public TransactionDto toDto(Transaction entity) {
         return TransactionDto.builder()
-                .id(entity.getId())
+                .transactionId(entity.getTransactionId())
                 .accountId(entity.getAccount().getId())
                 .amount(entity.getAmount())
                 .transactionTime(entity.getTransactionTime())
+                .status(entity.getStatus())
+                .timestamp(entity.getTimestamp())
                 .build();
     }
 

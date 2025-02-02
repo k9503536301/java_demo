@@ -50,6 +50,7 @@ public class ClientService {
     public Client toEntity(ClientDto dto) {
 
         return Client.builder()
+                .clientId(dto.getClientId())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .middleName(dto.getMiddleName())
@@ -58,7 +59,7 @@ public class ClientService {
 
     public ClientDto toDto(Client entity) {
         return ClientDto.builder()
-                .id(entity.getId())
+                .clientId(entity.getClientId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .middleName(entity.getMiddleName())
