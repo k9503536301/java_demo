@@ -19,7 +19,7 @@ public class TransactionConsumer {
             topics = "t1_demo_transactions",
             containerFactory = "transactionKafkaListenerContainerFactory"
     )
-    public void consumeAccountMessage(TransactionDto transactionDto){
+    public void consumeTransactionMessage(TransactionDto transactionDto){
         log.debug("Transaction consumer: start handler");
         try {
             Transaction transaction = transactionService.toEntity(transactionDto);
