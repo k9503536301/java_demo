@@ -5,7 +5,7 @@ CREATE SEQUENCE IF NOT EXISTS data_source_error_log_seq START WITH 1 INCREMENT B
 
 CREATE TABLE client
 (
-    id SERIAL PRIMARY KEY,
+    client_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     middle_name VARCHAR(255)
@@ -13,20 +13,24 @@ CREATE TABLE client
 
 CREATE TABLE account
 (
-    id SERIAL PRIMARY KEY,
+    account_id SERIAL PRIMARY KEY,
     client_id INT NOT NULL,
     account_type VARCHAR(30),
     balance DECIMAL(15,2) NOT NULL,
-    FOREIGN KEY (client_id) REFERENCES client(id) ON DELETE CASCADE
+    status VARCHAR(30),
+    frozen_amount DECIMAL(15,2) NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES client(client_id) ON DELETE CASCADE
 );
 
 CREATE TABLE transactions
 (
-    id SERIAL PRIMARY KEY,
+    transaction_id SERIAL PRIMARY KEY,
     account_id INT NOT NULL,
     amount DECIMAL(15,2) NOT NULL,
     transaction_time TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
+    status VARCHAR(30),
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
 );
 
 CREATE TABLE data_source_error_log

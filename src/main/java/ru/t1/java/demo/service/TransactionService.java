@@ -71,7 +71,7 @@ public class TransactionService {
     public TransactionDto toDto(Transaction entity) {
         return TransactionDto.builder()
                 .transactionId(entity.getTransactionId())
-                .accountId(entity.getAccount().getId())
+                .accountId(entity.getAccount().getAccountId())
                 .amount(entity.getAmount())
                 .transactionTime(entity.getTransactionTime())
                 .status(entity.getStatus())
