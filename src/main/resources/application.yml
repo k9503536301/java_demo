@@ -34,6 +34,7 @@ t1:
       accounts: t1_demo_accounts
       transactions: t1_demo_transactions
       metrics: t1_demo_metrics
+      transaction_accept: t1_demo_transaction_accept
     listener:
       poll-timeout: 1000
 

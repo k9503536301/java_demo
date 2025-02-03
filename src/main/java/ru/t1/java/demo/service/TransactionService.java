@@ -3,17 +3,23 @@ package ru.t1.java.demo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.java.demo.aop.annotation.LogDataSourceError;
+import ru.t1.java.demo.dto.TransactionAcceptanceDto;
 import ru.t1.java.demo.dto.TransactionDto;
+import ru.t1.java.demo.kafka.TransactionAcceptanceProducer;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.model.Transaction;
+import ru.t1.java.demo.model.enums.AccountStatus;
+import ru.t1.java.demo.model.enums.TransactionStatus;
 import ru.t1.java.demo.repository.TransactionRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +32,8 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
     private final ObjectMapper objectMapper;
+    private final TransactionAcceptanceProducer transactionAcceptanceProducer;
+
     @PostConstruct
     void init() {
         try {
@@ -100,5 +108,31 @@ public class TransactionService {
     @LogDataSourceError
     public void deleteTransactionById(Long transactionId) {
         transactionRepository.deleteById(transactionId);
+    }
+
+    @Transactional
+    public Transaction acceptTransaction(TransactionDto transactionDto) {
+        Transaction transaction = this.toEntity(transactionDto);
+        Account account = transaction.getAccount();
+        if (!account.getStatus().equals(AccountStatus.OPEN)) {
+            return this.createTransaction(transaction);
+        }
+
+        transaction.setStatus(TransactionStatus.REQUESTED);
+
+        BigDecimal requestingBalance = account.getBalance().add(transaction.getAmount());
+
+        TransactionAcceptanceDto transactionToAcceptance = TransactionAcceptanceDto.builder()
+                .accountId(account.getAccountId())
+                .transactionId(transaction.getTransactionId())
+                .clientId(account.getClient().getClientId())
+                .transactionAmount(transaction.getAmount())
+                .accountBalance(requestingBalance)
+                .timestamp(transaction.getTimestamp())
+                .build();
+
+        transactionAcceptanceProducer.sendTransactionToAccept(transactionToAcceptance);
+
+        return this.createTransaction(transaction);
     }
 }
