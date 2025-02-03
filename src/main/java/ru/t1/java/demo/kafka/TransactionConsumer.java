@@ -22,8 +22,7 @@ public class TransactionConsumer {
     public void consumeTransactionMessage(TransactionDto transactionDto){
         log.debug("Transaction consumer: start handler");
         try {
-            Transaction transaction = transactionService.toEntity(transactionDto);
-            Transaction createdTransaction = transactionService.createTransaction(transaction);
+            Transaction createdTransaction = transactionService.acceptTransaction(transactionDto);
 
             log.info("Created Transaction: {}", createdTransaction);
         } catch (Exception e) {
