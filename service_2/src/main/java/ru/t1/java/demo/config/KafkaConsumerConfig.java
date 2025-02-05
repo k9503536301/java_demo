@@ -18,7 +18,6 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 import ru.t1.java.demo.dto.TransactionAcceptanceDto;
-import ru.t1.java.demo.dto.TransactionDto;
 import ru.t1.java.demo.kafka.MessageDeserializer;
 
 import java.util.HashMap;

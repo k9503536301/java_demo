@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import ru.t1.java.demo.dto.TransactionAcceptanceDto;
-import ru.t1.java.demo.dto.TransactionDto;
-import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TransactionAcceptanceConsumer {
+public class TransactionConsumer {
     private final TransactionService transactionService;
 
     @KafkaListener(
@@ -20,13 +18,12 @@ public class TransactionAcceptanceConsumer {
             topics = "${t1.kafka.topic.transaction_accept}",
             containerFactory = "transactionKafkaListenerContainerFactory"
     )
-    public void consumeTransactionMessage(TransactionAcceptanceDto transactionDto){
+    public void consumeTransactionMessage(TransactionAcceptanceDto acceptanceDto){
         log.debug("Transaction consumer: start handler");
         try {
-            log.info("transaction: {}", transactionDto);
-//            Transaction createdTransaction = transactionService.acceptTransaction(transactionDto);
-
-//            log.info("Created Transaction: {}", createdTransaction);
+            log.info("transaction: {}", acceptanceDto);
+            transactionService.processTransaction(acceptanceDto);
+            log.info("Transaction was processed: {}", acceptanceDto);
         } catch (Exception e) {
             log.error("Failed to save transaction: {}", e.getMessage());
         }

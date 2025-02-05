@@ -6,24 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 
-/**
- * DTO for {@link ru.t1.java.demo.model.Client}
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientDto implements Serializable {
-    @JsonProperty("client_id")
-    private Long clientId;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("middle_name")
-    private String middleName;
+public class TransactionResultDto  implements Serializable {
+    @NotNull
+    @JsonProperty("transaction_id")
+    private Long transactionId;
+    @NotNull
+    @JsonProperty("account_id")
+    private Long accountId;
+    @NotNull
+    @JsonProperty("status")
+    private String status;
 }
