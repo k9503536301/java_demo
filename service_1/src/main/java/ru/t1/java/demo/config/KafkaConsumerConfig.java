@@ -42,10 +42,6 @@ public class KafkaConsumerConfig {
     private String maxPollIntervalsMs;
     @Value("${t1.kafka.consumer.heartbeat.interval}")
     private String heartbeatInterval;
-    @Value("${t1.kafka.topic.accounts}")
-    private String accounts;
-    @Value("${t1.kafka.topic.transactions}")
-    private String transactions;
 
     @Bean
     public ConsumerFactory<String, AccountDto> accountConsumerListenerFactory() {
