@@ -32,7 +32,7 @@ public class TransactionService {
         return TransactionResultDto.builder()
                 .accountId(entity.getAccount().getAccountId())
                 .transactionId(entity.getTransactionId())
-                .status(entity.getStatus().name())
+                .status(entity.getStatus())
                 .build();
     }
 
@@ -40,7 +40,7 @@ public class TransactionService {
         return TransactionResultDto.builder()
                 .accountId(acceptanceDto.getAccountId())
                 .transactionId(acceptanceDto.getTransactionId())
-                .status(transactionStatus.name())
+                .status(transactionStatus)
                 .build();
     }
 
@@ -61,7 +61,6 @@ public class TransactionService {
         LocalDateTime endTime = startTime.minusSeconds(transactionInterval);
         List<Transaction> transactionsPerInterval = transactionRepository.findByAccountAndStatusBetweenDates(
                 acceptanceDto.getAccountId(),
-                TransactionStatus.ACCEPTED,
                 startTime,
                 endTime
         );

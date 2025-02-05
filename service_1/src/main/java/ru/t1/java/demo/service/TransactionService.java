@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import ru.t1.java.demo.aop.annotation.LogDataSourceError;
 import ru.t1.java.demo.dto.TransactionAcceptanceDto;
 import ru.t1.java.demo.dto.TransactionDto;
-import ru.t1.java.demo.kafka.TransactionAcceptanceProducer;
+import ru.t1.java.demo.dto.TransactionResultDto;
+import ru.t1.java.demo.kafka.TransactionProducer;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.model.enums.AccountStatus;
@@ -32,7 +33,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
     private final ObjectMapper objectMapper;
-    private final TransactionAcceptanceProducer transactionAcceptanceProducer;
+    private final TransactionProducer transactionProducer;
 
     @PostConstruct
     void init() {
@@ -88,8 +89,9 @@ public class TransactionService {
     }
 
     @LogDataSourceError
-    public Optional<Transaction> getTransactionById(Long id) {
-        return transactionRepository.findById(id);
+    public Transaction getTransactionById(Long id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
     }
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
@@ -131,8 +133,56 @@ public class TransactionService {
                 .timestamp(transaction.getTimestamp())
                 .build();
 
-        transactionAcceptanceProducer.sendTransactionToAccept(transactionToAcceptance);
+        transactionProducer.sendTransactionToAccept(transactionToAcceptance);
+
+        account.setBalance(requestingBalance);
+        accountService.updateAccount(account);
 
         return this.createTransaction(transaction);
+    }
+
+    @Transactional
+    public void processTransaction(TransactionResultDto transactionResultDto) throws Exception {
+        switch (transactionResultDto.getStatus()){
+            case ACCEPTED -> acceptTransaction(transactionResultDto);
+            case REJECTED -> rejectTransaction(transactionResultDto);
+            case BLOCKED -> blockTransactionAndAccount(transactionResultDto);
+            default -> throw new Exception("Transaction status is not valid");
+        }
+
+    }
+
+    private void acceptTransaction(TransactionResultDto transactionResultDto) {
+        Transaction transaction =  this.getTransactionById(transactionResultDto.getTransactionId());
+
+        transaction.setStatus(TransactionStatus.ACCEPTED);
+        updateTransaction(transaction);
+    }
+
+    private void rejectTransaction(TransactionResultDto transactionResultDto) {
+        Transaction transaction =  this.getTransactionById(transactionResultDto.getTransactionId());
+
+        transaction.setStatus(TransactionStatus.REJECTED);
+        updateTransaction(transaction);
+
+        Account account = transaction.getAccount();
+        BigDecimal balance = account.getBalance().subtract(transaction.getAmount());
+        account.setBalance(balance);
+        accountService.updateAccount(account);
+    }
+
+    private void blockTransactionAndAccount(TransactionResultDto transactionResultDto) {
+        Transaction transaction =  this.getTransactionById(transactionResultDto.getTransactionId());
+
+        transaction.setStatus(TransactionStatus.BLOCKED);
+        updateTransaction(transaction);
+
+        Account account = transaction.getAccount();
+        BigDecimal balance = account.getBalance().subtract(transaction.getAmount());
+        BigDecimal frozenAmount = account.getFrozenAmount().add(transaction.getAmount());
+
+        account.setBalance(balance);
+        account.setFrozenAmount(frozenAmount);
+        accountService.updateAccount(account);
     }
 }

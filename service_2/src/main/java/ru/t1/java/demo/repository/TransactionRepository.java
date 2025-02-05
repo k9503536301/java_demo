@@ -11,13 +11,11 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     @Query(value = "SELECT * FROM transaction WHERE account_id= :accountId"
-            + " AND status = :#{#status?.name()}"
             + " AND timestamp BETWEEN :startTime"
             + " AND :endTime"
             , nativeQuery = true)
     List<Transaction> findByAccountAndStatusBetweenDates(
             @Param("accountId") Long accountId,
-            @Param("status") TransactionStatus status,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
 }

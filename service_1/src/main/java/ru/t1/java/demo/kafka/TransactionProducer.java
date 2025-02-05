@@ -13,7 +13,7 @@ import ru.t1.java.demo.dto.TransactionAcceptanceDto;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TransactionAcceptanceProducer {
+public class TransactionProducer {
     private final KafkaTemplate kafkaTemplate;
 
     @Value("${t1.kafka.topic.transaction_accept}")

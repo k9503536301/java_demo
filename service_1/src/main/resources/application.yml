@@ -35,6 +35,7 @@ t1:
       transactions: t1_demo_transactions
       metrics: t1_demo_metrics
       transaction_accept: t1_demo_transaction_accept
+      transaction_result: t1_demo_transaction_result
     listener:
       poll-timeout: 1000
 
