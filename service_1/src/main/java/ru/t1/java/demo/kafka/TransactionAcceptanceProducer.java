@@ -19,13 +19,13 @@ public class TransactionAcceptanceProducer {
     @Value("${t1.kafka.topic.transaction_accept}")
     private String transactionAcceptTopic;
 
-    public void sendTransactionToAccept(TransactionAcceptanceDto transactionRequestDto) {
-        Message<TransactionAcceptanceDto> message = MessageBuilder.withPayload(transactionRequestDto)
+    public void sendTransactionToAccept(TransactionAcceptanceDto transactionAcceptanceDto) {
+        Message<TransactionAcceptanceDto> message = MessageBuilder.withPayload(transactionAcceptanceDto)
                 .setHeader(KafkaHeaders.TOPIC, transactionAcceptTopic)
                 .build();
         try {
             kafkaTemplate.send(message);
-            log.info("Request transaction to accept. Transaction: {}", transactionRequestDto.getTransactionId());
+            log.info("Request transaction to accept. Transaction: {}", transactionAcceptanceDto.getTransactionId());
         } catch (Exception e) {
             log.error("Failed to request transaction acceptance: {}", e.getMessage(), e);
         }
