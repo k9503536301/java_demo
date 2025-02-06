@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountDto implements Serializable {
+public class AccountDto {
     @NotNull
     @JsonProperty("account_id")
     private Long accountId;

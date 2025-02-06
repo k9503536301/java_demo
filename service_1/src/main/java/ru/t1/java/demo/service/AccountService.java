@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class AccountService {
     private final AccountRepository accountRepository;
     private final ClientService clientService;
+
     @PostConstruct
     void init() {
         try {
@@ -51,8 +52,7 @@ public class AccountService {
     }
 
     public Account toEntity(AccountDto dto) {
-        Client client = clientService.getClientById(dto.getClientId())
-                .orElseThrow(() -> new EntityNotFoundException("Account Client not found"));
+        Client client = clientService.getClientById(dto.getClientId());
 
         return Account.builder()
                 .accountId(dto.getAccountId())
@@ -76,8 +76,9 @@ public class AccountService {
     }
 
     @LogDataSourceError
-    public Optional<Account> getAccountById(Long id) {
-        return accountRepository.findById(id);
+    public Account getAccountById(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Account not found"));
     }
 
     @LogDataSourceError

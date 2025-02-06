@@ -2,6 +2,7 @@ package ru.t1.java.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
+
     @PostConstruct
     void init() {
         try {
@@ -67,8 +69,9 @@ public class ClientService {
     }
 
     @LogDataSourceError
-    public Optional<Client> getClientById(Long id) {
-        return clientRepository.findById(id);
+    public Client getClientById(Long id) {
+        return clientRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Client not found"));
     }
 
     @LogDataSourceError

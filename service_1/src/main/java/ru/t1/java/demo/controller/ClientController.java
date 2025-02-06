@@ -37,9 +37,6 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ClientDto> updateClient(@PathVariable Long id, @RequestBody ClientDto client) {
-        if (clientService.getClientById(id).isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         Client clientToUpdate = clientService.toEntity(client);
         clientToUpdate.setClientId(id);
         Client updatedClient = clientService.updateClient(clientToUpdate);
