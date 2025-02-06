@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,8 +63,7 @@ public class TransactionService {
     }
 
     public Transaction toEntity(TransactionDto dto) {
-        Account account = accountService.getAccountById(dto.getAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("Transaction Account not found"));
+        Account account = accountService.getAccountById(dto.getAccountId());
 
         return Transaction.builder()
                 .transactionId(dto.getTransactionId())
@@ -93,6 +91,7 @@ public class TransactionService {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
     }
+
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
