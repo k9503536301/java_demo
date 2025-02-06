@@ -15,7 +15,7 @@ public class TransactionConsumer {
 
     @KafkaListener(
             groupId = "${t1.kafka.consumer.group-id}",
-            topics = "${t1.kafka.topic.transaction_accept}",
+            topics = "t1_demo_transaction_accept",
             containerFactory = "transactionKafkaListenerContainerFactory"
     )
     public void consumeTransactionMessage(TransactionAcceptanceDto acceptanceDto){

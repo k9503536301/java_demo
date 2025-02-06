@@ -17,7 +17,7 @@ public class TransactionConsumer {
 
     @KafkaListener(
             groupId = "${t1.kafka.consumer.group-id}",
-            topics = "$(t1.kafka.topic.transactions)",
+            topics = "t1_demo_transactions",
             containerFactory = "transactionKafkaListenerContainerFactory"
     )
     public void consumeTransactionMessage(TransactionDto transactionDto){
@@ -35,7 +35,7 @@ public class TransactionConsumer {
 
     @KafkaListener(
             groupId = "${t1.kafka.consumer.group-id}",
-            topics = "$(t1.kafka.topic.transaction_result)",
+            topics = "t1_demo_transaction_result",
             containerFactory = "transactionKafkaListenerContainerFactory"
     )
     public void consumeTransactionProcessingResultMessage(TransactionResultDto transactionDto){
