@@ -18,9 +18,11 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 public class MetricAspect {
-    private final MetricProducer metricProducer;
     @Value("${track.time-limit-exceed}")
     private Long executionTimeLimit;
+
+    private final MetricProducer metricProducer;
+
     @Around("@annotation(ru.t1.java.demo.aop.annotation.Metric)")
     public Object logExecTime(ProceedingJoinPoint pJoinPoint) throws Throwable {
         log.info("Invoke method: {}", pJoinPoint.getSignature().toShortString());
