@@ -17,7 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientDto implements Serializable {
+public class ClientDto {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("first_name")

@@ -26,6 +26,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
     private final ObjectMapper objectMapper;
+
     @PostConstruct
     void init() {
         try {
@@ -55,8 +56,7 @@ public class TransactionService {
     }
 
     public Transaction toEntity(TransactionDto dto) {
-        Account account = accountService.getAccountById(dto.getAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("Transaction Account not found"));
+        Account account = accountService.getAccountById(dto.getAccountId());
 
         return Transaction.builder()
                 .id(dto.getId())
@@ -76,8 +76,9 @@ public class TransactionService {
     }
 
     @LogDataSourceError
-    public Optional<Transaction> getTransactionById(Long id) {
-        return transactionRepository.findById(id);
+    public Transaction getTransactionById(Long id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Transaction not found"));
     }
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();

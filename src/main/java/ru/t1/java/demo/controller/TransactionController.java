@@ -36,9 +36,6 @@ public class TransactionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TransactionDto> updateTransaction(@PathVariable Long id, @RequestBody TransactionDto transaction) {
-        if (transactionService.getTransactionById(id).isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         Transaction transactionToUpdate = transactionService.toEntity(transaction);
         transactionToUpdate.setId(id);
         Transaction updatedTransaction = transactionService.updateTransaction(transactionToUpdate);
