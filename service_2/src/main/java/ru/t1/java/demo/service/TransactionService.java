@@ -57,8 +57,8 @@ public class TransactionService {
     }
 
     private Boolean checkLimitTransactionPerInterval(TransactionAcceptanceDto acceptanceDto) {
-        LocalDateTime startTime = acceptanceDto.getTimestamp();
-        LocalDateTime endTime = startTime.minusSeconds(transactionInterval);
+        LocalDateTime endTime = acceptanceDto.getTimestamp();
+        LocalDateTime startTime = endTime.minusSeconds(transactionInterval);
         List<Transaction> transactionsPerInterval = transactionRepository.findByAccountAndStatusBetweenDates(
                 acceptanceDto.getAccountId(),
                 startTime,

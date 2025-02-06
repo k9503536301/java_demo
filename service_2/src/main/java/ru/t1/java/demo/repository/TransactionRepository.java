@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query(value = "SELECT * FROM transaction WHERE account_id= :accountId"
+    @Query(value = "SELECT * FROM transactions WHERE account_id= :accountId"
             + " AND timestamp BETWEEN :startTime"
             + " AND :endTime"
             , nativeQuery = true)

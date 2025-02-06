@@ -19,7 +19,7 @@ t1:
     bootstrap:
       server: localhost:9092
     consumer:
-      group-id: t1-demo-2
+      group-id: t1-demo
       max.poll.records: 10
       session-timeout: 10000
       heartbeat.interval: 3000
