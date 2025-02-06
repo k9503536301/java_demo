@@ -6,24 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
+import ru.t1.java.demo.model.AccountType;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-/**
- * DTO for {@link ru.t1.java.demo.model.Client}
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientDto {
-    @JsonProperty("id")
+public class AccountDto {
     private Long id;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("middle_name")
-    private String middleName;
+    @NotNull
+    @JsonProperty("client_id")
+    private Long clientId;
+    @NotNull
+    @JsonProperty("account_type")
+    private AccountType accountType;
+    @NotNull
+    @JsonProperty("balance")
+    private BigDecimal balance;
 }
