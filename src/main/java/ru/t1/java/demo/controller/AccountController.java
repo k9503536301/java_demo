@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.t1.java.demo.aop.annotation.Metric;
 import ru.t1.java.demo.dto.AccountDto;
+import ru.t1.java.demo.exception.AccountException;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.service.AccountService;
 
@@ -20,29 +21,30 @@ public class AccountController {
 
     @Metric
     @GetMapping
-    public ResponseEntity<List<AccountDto>> getAllAccounts() {
-        List<AccountDto> accounts = accountService.getAllAccounts()
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountDto> getAllAccounts() {
+        return accountService.getAllAccounts()
                 .stream()
                 .map(accountService::toDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @Metric
     @PostMapping
-    public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto account) {
-        Account newAccount = accountService.toEntity(account);
-        Account savedAccount = accountService.createAccount(newAccount);
-
-        return new ResponseEntity<>(accountService.toDto(savedAccount), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountDto createAccount(@RequestBody AccountDto account) throws AccountException {
+        try {
+            Account newAccount = accountService.toEntity(account);
+            Account savedAccount = accountService.createAccount(newAccount);
+            return accountService.toDto(savedAccount);
+        } catch (AccountException e) {
+            throw new AccountException(e.getMessage());
+        }
     }
 
     @Metric
     @PutMapping("/{id}")
     public ResponseEntity<AccountDto> updateAccount(@PathVariable Long id, @RequestBody AccountDto account) {
-        if (accountService.getAccountById(id).isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         Account accountToUpdate = accountService.toEntity(account);
         accountToUpdate.setId(id);
         Account updatedAccount = accountService.updateAccount(accountToUpdate);
