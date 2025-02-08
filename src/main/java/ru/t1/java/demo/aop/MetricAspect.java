@@ -18,6 +18,7 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 public class MetricAspect {
+    
     @Value("${track.time-limit-exceed}")
     private Long executionTimeLimit;
 
@@ -30,7 +31,10 @@ public class MetricAspect {
         Object result = null;
         try {
             result = pJoinPoint.proceed();
-        } finally {
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage());
+            throw throwable;
+        }finally {
             long executionTime = System.currentTimeMillis() - beforeTime;
             log.info("Execution time: {} ms", executionTime);
 
