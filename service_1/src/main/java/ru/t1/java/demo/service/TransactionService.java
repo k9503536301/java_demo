@@ -92,6 +92,7 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
     }
 
+    @LogDataSourceError
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }

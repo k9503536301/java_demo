@@ -15,8 +15,10 @@ import java.util.Map;
 
 @Configuration
 public class KafkaProducerConfig {
+
     @Value("${t1.kafka.bootstrap.server}")
     private String servers;
+    
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> props = new HashMap<>();
