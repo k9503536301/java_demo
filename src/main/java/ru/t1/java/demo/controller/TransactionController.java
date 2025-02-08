@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.t1.java.demo.aop.annotation.Metric;
 import ru.t1.java.demo.dto.TransactionDto;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class TransactionController {
     private final TransactionService transactionService;
 
+    @Metric
     @GetMapping
     public ResponseEntity<List<TransactionDto>> getAllTransactions() {
         List<TransactionDto> transactions = transactionService.getAllTransactions()
@@ -26,6 +28,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
+    @Metric
     @PostMapping
     public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transaction) {
         Transaction newTransaction = transactionService.toEntity(transaction);
@@ -34,6 +37,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.toDto(savedTransaction), HttpStatus.CREATED);
     }
 
+    @Metric
     @PutMapping("/{id}")
     public ResponseEntity<TransactionDto> updateTransaction(@PathVariable Long id, @RequestBody TransactionDto transaction) {
         Transaction transactionToUpdate = transactionService.toEntity(transaction);
@@ -42,6 +46,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.toDto(updatedTransaction), HttpStatus.OK);
     }
 
+    @Metric
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         transactionService.deleteTransactionById(id);

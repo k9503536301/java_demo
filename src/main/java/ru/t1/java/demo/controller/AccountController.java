@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.t1.java.demo.aop.annotation.Metric;
 import ru.t1.java.demo.dto.AccountDto;
 import ru.t1.java.demo.exception.AccountException;
 import ru.t1.java.demo.model.Account;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class AccountController {
     private final AccountService accountService;
 
+    @Metric
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<AccountDto> getAllAccounts() {
@@ -27,6 +29,7 @@ public class AccountController {
                 .collect(Collectors.toList());
     }
 
+    @Metric
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AccountDto createAccount(@RequestBody AccountDto account) throws AccountException {
@@ -39,6 +42,7 @@ public class AccountController {
         }
     }
 
+    @Metric
     @PutMapping("/{id}")
     public ResponseEntity<AccountDto> updateAccount(@PathVariable Long id, @RequestBody AccountDto account) {
         Account accountToUpdate = accountService.toEntity(account);
@@ -47,6 +51,7 @@ public class AccountController {
         return new ResponseEntity<>(accountService.toDto(updatedAccount), HttpStatus.OK);
     }
 
+    @Metric
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccountById(id);
