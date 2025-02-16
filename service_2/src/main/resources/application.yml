@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: t1-java-demo-2
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/t1_demo"
+    username: "postgres"
+    password: "0000"
+    driverClassName: org.postgresql.Driver
+
+logging:
+  level:
+    ROOT: INFO
+    ru.t1.java.demo.controller.ClientController: DEBUG
+    org.apache.kafka: INFO
+
+t1:
+  scan-path: ru.t1.java.demo
+  kafka:
+    bootstrap:
+      server: localhost:9092
+    consumer:
+      group-id: t1-demo
+      max.poll.records: 10
+      session-timeout: 10000
+      heartbeat.interval: 3000
+    producer:
+      enable: true
+    topic:
+      transaction_accept: t1_demo_transaction_accept
+      transaction_result: t1_demo_transaction_result
+    listener:
+      poll-timeout: 1000
+  transaction:
+    frequency-limit:
+      interval: 10000
+      count: 10
+
+track:
+  time-limit-exceed: 1000
+
+server:
+  port: 8081
