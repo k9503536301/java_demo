@@ -23,7 +23,6 @@ import ru.t1.java.demo.kafka.MessageDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
