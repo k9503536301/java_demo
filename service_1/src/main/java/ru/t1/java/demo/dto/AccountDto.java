@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.misc.NotNull;
 import ru.t1.java.demo.model.enums.AccountStatus;
 import ru.t1.java.demo.model.enums.AccountType;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data

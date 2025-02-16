@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import ru.t1.java.demo.model.enums.TransactionStatus;
 
-import java.io.Serializable;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TransactionResultDto  implements Serializable {
+public class TransactionResultDto {
     @NotNull
     @JsonProperty("transaction_id")
     private Long transactionId;
